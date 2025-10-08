@@ -1,26 +1,213 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Schedule Information System - Lab 4</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    body{font-family:Arial;padding:18px}
-    .red{color:red}
-    .record{border:1px solid #ddd;padding:8px;margin:6px;border-radius:6px}
-    #controls{margin-bottom:12px}
+    :root {
+      --primary-color: #4A90E2;
+      --secondary-color: #FF9800;
+      --accent-color: #F5A623;
+      --danger-color: #D0021B;
+      --text-primary: #2C3E50;
+      --text-secondary: #7F8C8D;
+      --bg-primary: #F8F9FA;
+      --bg-secondary: #FFFFFF;
+      --border-color: #E0E6ED;
+      --shadow-light: 0 2px 8px rgba(0,0,0,0.1);
+      --shadow-medium: 0 4px 16px rgba(0,0,0,0.15);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #E3F2FD 0%, #FFF8E1 100%);
+      color: var(--text-primary);
+      padding: 24px;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    h2 {
+      text-align: center;
+      font-weight: 300;
+      font-size: 2.5em;
+      margin-bottom: 32px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 1px;
+    }
+
+    #controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+      padding: 24px;
+      background: var(--bg-secondary);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
+    }
+
+    input {
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1em;
+      transition: var(--transition);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    }
+
+    input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.8;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      background: var(--primary-color);
+      color: white;
+      box-shadow: var(--shadow-light);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    #addBtn {
+      background: var(--secondary-color);
+      grid-column: span 2;
+    }
+
+    #resetBtn {
+      background: var(--danger-color);
+      grid-column: span 2;
+    }
+
+    #sortDay, #sortTime, #filterMon {
+      background: var(--accent-color);
+      grid-column: span 1;
+    }
+
+    #search {
+      grid-column: span 3;
+    }
+
+    #summary {
+      background: var(--bg-secondary);
+      padding: 20px;
+      margin-bottom: 16px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-light);
+      border-left: 4px solid var(--primary-color);
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    #list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .record {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 16px;
+      margin: 8px 0;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-light);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .record::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+    }
+
+    .record:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .red {
+      color: var(--danger-color);
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+      }
+
+      h2 {
+        font-size: 2em;
+      }
+
+      #controls {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 16px;
+      }
+
+      #addBtn, #resetBtn {
+        grid-column: span 1;
+      }
+
+      #search {
+        grid-column: span 1;
+      }
+    }
   </style>
 </head>
 <body>
   <h2>Schedule Information System — Lab 4</h2>
 
   <div id="controls">
-    <input id="subject" placeholder="Subject/Event">
-    <input id="day" placeholder="Day (Mon)">
-    <input id="time" placeholder="Time (e.g. 10:00-11:30)">
-    <input id="room" placeholder="Room">
-    <button id="addBtn">Add</button>
-    <button id="resetBtn">Reset</button>
-    <input id="search" placeholder="Search subject...">
+    <input id="subject" placeholder="Subject/Event" />
+    <input id="day" placeholder="Day (Mon)" />
+    <input id="time" placeholder="Time (e.g. 10:00-11:30)" />
+    <input id="room" placeholder="Room" />
+    <button id="addBtn">Add Schedule</button>
+    <button id="resetBtn">Reset All</button>
+    <input id="search" placeholder="Search subject..." />
     <button id="sortDay">Sort by Day</button>
     <button id="sortTime">Sort by Time</button>
     <button id="filterMon">Filter: Monday</button>
