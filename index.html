@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schedule Information System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3B82F6; /* Soft blue accent */
+      --text-primary: #111827;
+      --text-secondary: #6B7280;
+      --bg-primary: #F9FAFB; /* Light gray */
+      --bg-secondary: #FFFFFF;
+      --border-color: #E5E7EB;
+      --border-radius: 8px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth easing */
+      --animation-duration: 0.6s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      padding: 2rem;
+      min-height: 100vh;
+      line-height: 1.5;
+      overflow-x: hidden; /* For smooth animations */
+    }
+
+    /* Title Animation: Bold scale-in with subtle glow */
+    h2 {
+      text-align: center;
+      font-weight: 700; /* Bolder for emphasis */
+      font-size: 2.5rem; /* Slightly larger for boldness */
+      margin-bottom: 2rem;
+      color: var(--primary-color);
+      letter-spacing: -0.025em;
+      text-shadow: 0 2px 4px rgba(59, 130, 246, 0.2); /* Subtle bold glow */
+      animation: titleScaleIn var(--animation-duration) ease-out forwards;
+      opacity: 0;
+      transform: scale(0.8) translateY(-20px);
+    }
+
+    @keyframes titleScaleIn {
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    #controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      background: var(--bg-secondary);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
+      animation: slideUp var(--animation-duration) 0.2s ease-out forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Staggered animation for inputs and buttons */
+    input, button {
+      animation: fadeInUp 0.4s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    input:nth-child(1), button:nth-child(5) { animation-delay: 0.1s; }
+    input:nth-child(2), button:nth-child(6) { animation-delay: 0.2s; }
+    input:nth-child(3), button:nth-child(7) { animation-delay: 0.3s; }
+    input:nth-child(4), button:nth-child(8) { animation-delay: 0.4s; }
+    button:nth-child(9) { animation-delay: 0.5s; }
+    button:nth-child(10) { animation-delay: 0.6s; }
+    button:nth-child(11) { animation-delay: 0.7s; }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    input {
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+      transform: scale(1.02); /* Subtle focus animation */
+    }
+
+    input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    button {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 0.95rem;
+      font-weight: 600; /* Bolder buttons */
+      cursor: pointer;
+      transition: var(--transition);
+      background: var(--primary-color);
+      color: white;
+      border: 1px solid var(--primary-color);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    button:hover::before {
+      left: 100%; /* Shimmer effect on hover */
+    }
+
+    button:hover {
+      background: #2563EB;
+      transform: translateY(-2px) scale(1.05); /* Lift and scale */
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); /* Glow shadow */
+    }
+
+    button:active {
+      transform: translateY(0) scale(1);
+    }
+
+    #addBtn {
+      background: #10B981; /* Green for add */
+      border-color: #10B981;
+    }
+
+    #addBtn:hover {
+      background: #059669;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    #resetBtn {
+      background: #EF4444; /* Red for reset */
+      border-color: #EF4444;
+    }
+
+    #resetBtn:hover {
+      background: #DC2626;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    #sortDay, #sortTime, #filterMon {
+      background: #6B7280; /* Neutral gray */
+      border-color: #6B7280;
+      font-size: 0.9rem;
+    }
+
+    #sortDay:hover, #sortTime:hover, #filterMon:hover {
+      background: #4B5563;
+      box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    #search {
+      grid-column: span 2;
+    }
+
+    #summary {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: var(--border-radius);
+      border-left: 3px solid var(--primary-color);
+      font-weight: 600; /* Bolder summary */
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      animation: fadeIn 0.5s ease-out 0.8s forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    #list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .record {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateX(20px) scale(0.95); /* Initial state for add animation */
+      animation: slideInRecord var(--animation-duration) ease-out forwards;
+      cursor: pointer; /* Indicate interactivity */
+      outline: none; /* For focus styles */
+    }
+
+    /* Animate each record with stagger */
+    .record:nth-child(1) { animation-delay: 0.9s; }
+    .record:nth-child(2) { animation-delay: 1.0s; }
+    .record:nth-child(3) { animation-delay: 1.1s; }
+    .record:nth-child(n+4) { animation-delay: 1.2s; } /* For dynamic adds */
+
+    @keyframes slideInRecord {
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    /* Enhanced Hover: More movement - slide, scale, and subtle rotation */
+    .record:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+      transform: translateX(10px) scale(1.02) rotate(1deg); /* Slide further + tiny tilt for "movement" */
+      transition: var(--transition); /* Smooth */
+    }
+
+    /* Active/Touch: Bounce back on press/touch */
+    .record:active {
+      transform: translateX(5px) scale(0.98) rotate(0deg); /* Quick press feedback */
+      transition: all 0.1s ease; /* Fast for touch */
+    }
+
+    /* Focus for Keyboard/Arrow Navigation: Similar movement + outline */
+    .record:focus-visible {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2), 0 4px 12px rgba(59, 130, 246, 0.15);
+      transform: translateX(10px) scale(1.02) rotate(1deg); /* Same as hover for accessibility */
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+
+    .record strong {
+      color: var(--primary-color);
+      font-weight: 600; /* Bold subjects */
+    }
+
+    /* Dynamic animation for new records (via JS class addition if needed) */
+    .record.new {
+      animation: slideInRecord 0.4s ease-out;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      h2 {
+        font-size: 2rem;
+        text-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
+      }
+
+      #controls {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        padding: 1rem;
+      }
+
+      #search {
+        grid-column: span 1;
+      }
+
+      button:hover {
+        transform: translateY(-1px) scale(1.02); /* Reduced on mobile */
+      }
+
+      /* Mobile touch: Enhance active state for "arrow touch" feel */
+      .record:active {
+        transform: translateX(5px) scale(0.99); /* Subtle press on touch */
+      }
+
+      .record:focus-visible {
+        transform: translateX(5px) scale(1.01); /* Lighter on mobile */
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>Schedule Information System</h2>
+
+  <div id="controls">
+    <input id="subject" placeholder="Subject/Event" />
+    <input id="day" placeholder="Day (e.g., Mon)" />
+    <input id="time" placeholder="Time (e.g., 10:00-11:30)" />
+    <input id="room" placeholder="Room" />
+    <button id="addBtn">Add Schedule</button>
+    <button id="resetBtn">Reset All</button>
+    <input id="search" placeholder="Search subject..." />
+    <button id="sortDay">Sort by Day</button>
+    <button id="sortTime">Sort by Time</button>
+    <button id="filterMon">Filter: Monday</button>
+  </div>
+
+  <div id="summary"></div>
+  <div id="list"></div>
+
+  <script src="app.js"></script>
+  <script>
+    // Optional JS to enhance animations for dynamically added records
+    // (Add 'new' class to newly created .record divs in your app.js renderList)
+    // Example: In renderList, after creating div: div.classList.add('new');
+
+    // Keyboard Navigation Support: Arrow keys to move focus between records
+    document.addEventListener('DOMContentLoaded', () => {
+      const records = document.querySelectorAll('.record');
+      let currentIndex = 0;
+
+      // Make records focusable for keyboard
+      records.forEach((record, index) => {
+        record.setAttribute('tabindex', '0'); // Allow focus
+      });
+
+      // Arrow key navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const nextIndex = e.key === 'ArrowDown' ? (currentIndex + 1) % records.length : (currentIndex - 1 + records.length) % records.length;
+          records[currentIndex].blur(); // Remove focus from current
+          records[nextIndex].focus(); // Focus next
+          currentIndex = nextIndex;
+        }
+      });
+
+      // Initial focus on first record if any
+      if (records.length > 0) {
+        records[0].focus();
+      }
+    });
+  </script>
+</body>
+</html>
